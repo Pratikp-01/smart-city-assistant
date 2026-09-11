@@ -1,5 +1,4 @@
-# UrbanEase — Smart City Assistant (SDG 11)
-
+# UrbanEase — Smart City Assistant :
 A web chatbot + API built for the **Next Gen Chatbot Arena**, Track 11 —
 *Sustainable Cities & Communities*. It helps residents with sustainable
 transport, waste segregation, energy/water use, green public spaces, and
