@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>UrbanEase | Smart City Assistant</title>
+
+  <style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    /* ===== SMART CITY COLOUR SYSTEM ===== */
+
+    --bg: #071a16;
+    --bg-2: #0b2922;
+
+    --surface: #102d26;
+    --surface-2: #14382f;
+    --surface-soft: #173f35;
+
+    --ink: #f4fffb;
+    --ink-soft: #d9eee7;
+    --muted: #9ab7ad;
+
+    --green: #25d98b;
+    --green-dark: #0fa968;
+    --green-light: #163f32;
+
+    --cyan: #35d6e8;
+    --blue: #4f8cff;
+
+    --amber: #ffc857;
+    --red: #ff6b6b;
+
+    --border: rgba(110, 190, 160, 0.18);
+
+    --shadow:
+      0 25px 70px rgba(0, 0, 0, 0.35);
+
+    --radius: 22px;
+  }
+
+
+  /* =========================
+     BODY
+  ========================= */
+
+  body {
+    font-family:
+      Inter,
+      Arial,
+      Helvetica,
+      sans-serif;
+
+    background:
+      radial-gradient(
+        circle at 10% 0%,
+        rgba(37, 217, 139, 0.16),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 90% 90%,
+        rgba(53, 214, 232, 0.10),
+        transparent 30%
+      ),
+      linear-gradient(
+        135deg,
+        var(--bg),
+        var(--bg-2)
+      );
+
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+
+  button,
+  input,
+  textarea {
+    font: inherit;
+  }
+
+
+  /* =========================
+     APP
+  ========================= */
+
+  .app {
+    width: 100%;
+    max-width: 900px;
+    min-height: 100vh;
+
+    margin: auto;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+
+  /* =========================
+     HEADER
+  ========================= */
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 16px 4px 24px;
+  }
+
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+
+  .logo {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+
+    background:
+      linear-gradient(
+        135deg,
+        var(--green),
+        #0b9b63
+      );
+
+    color: #ffffff;
+
+    box-shadow:
+      0 10px 30px
+      rgba(37, 217, 139, 0.25);
+  }
+
+
+  .brand h1 {
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+
+  .brand p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+
+  /* =========================
+     ONLINE STATUS
+  ========================= */
+
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 13px;
+
+    border:
+      1px solid
+      rgba(37, 217, 139, 0.25);
+
+    background:
+      rgba(37, 217, 139, 0.08);
+
+    border-radius: 30px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    color: var(--green);
+  }
+
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+
+    background: var(--green);
+
+    border-radius: 50%;
+
+    box-shadow:
+      0 0 0 4px
+      rgba(37, 217, 139, 0.12),
+
+      0 0 15px
+      rgba(37, 217, 139, 0.7);
+  }
+
+
+  /* =========================
+     HERO
+  ========================= */
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+
+    background:
+      linear-gradient(
+        135deg,
+        rgba(20, 56, 47, 0.96),
+        rgba(10, 39, 32, 0.96)
+      );
+
+    border:
+      1px solid
+      rgba(90, 180, 145, 0.20);
+
+    border-radius: 28px;
+
+    padding: 32px;
+
+    margin-bottom: 18px;
+
+    box-shadow: var(--shadow);
+  }
+
+
+  .hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    right: -90px;
+    top: -100px;
+
+    background:
+      radial-gradient(
+        circle,
+        rgba(37, 217, 139, 0.20),
+        transparent 65%
+      );
+
+    pointer-events: none;
+  }
+
+
+  .hero::after {
+    content: "🌱";
+
+    position: absolute;
+
+    right: 28px;
+    bottom: -18px;
+
+    font-size: 95px;
+
+    opacity: 0.08;
+
+    transform: rotate(-12deg);
+  }
+
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background:
+      rgba(37, 217, 139, 0.12);
+
+    border:
+      1px solid
+      rgba(37, 217, 139, 0.20);
+
+    color: var(--green);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    margin-bottom: 14px;
+  }
+
+
+  .hero h2 {
+    font-size:
+      clamp(28px, 5vw, 43px);
+
+    line-height: 1.08;
+
+    max-width: 650px;
+
+    letter-spacing: -1.6px;
+  }
+
+
+  .hero h2 span {
+    color: var(--green);
+
+    text-shadow:
+      0 0 25px
+      rgba(37, 217, 139, 0.18);
+  }
+
+
+  .hero p {
+    margin-top: 14px;
+
+    max-width: 650px;
+
+    line-height: 1.65;
+
+    color: var(--muted);
+
+    font-size: 15px;
+  }
+
+
+  /* =========================
+     CHAT CARD
+  ========================= */
+
+  .chat-card {
+    flex: 1;
+
+    min-height: 500px;
+
+    background:
+      rgba(16, 45, 38, 0.94);
+
+    border:
+      1px solid
+      var(--border);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    backdrop-filter: blur(20px);
+  }
+
+
+  /* =========================
+     CHAT HEADER
+  ========================= */
+
+  .chat-header {
+    padding: 15px 18px;
+
+    border-bottom:
+      1px solid
+      var(--border);
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    background:
+      rgba(20, 56, 47, 0.65);
+  }
+
+
+  .bot-avatar {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 13px;
+
+    background:
+      linear-gradient(
+        135deg,
+        rgba(37, 217, 139, 0.16),
+        rgba(53, 214, 232, 0.10)
+      );
+
+    border:
+      1px solid
+      rgba(37, 217, 139, 0.18);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+  }
+
+
+  .chat-header strong {
+    display: block;
+
+    font-size: 14px;
+  }
+
+
+  .chat-header small {
+    color: var(--green);
+
+    font-size: 11px;
+
+    font-weight: 700;
+  }
+
+
+  .clear-btn {
+    margin-left: auto;
+
+    border: 0;
+
+    background:
+      transparent;
+
+    color: var(--muted);
+
+    cursor: pointer;
+
+    padding: 8px;
+
+    border-radius: 10px;
+
+    transition: 0.2s ease;
+  }
+
+
+  .clear-btn:hover {
+    background:
+      rgba(255, 107, 107, 0.10);
+
+    color: var(--red);
+  }
+
+
+  /* =========================
+     MESSAGES
+  ========================= */
+
+  .messages {
+    flex: 1;
+
+    padding: 22px;
+
+    overflow-y: auto;
+
+    min-height: 320px;
+
+    max-height: 500px;
+
+    scroll-behavior: smooth;
+  }
+
+
+  .message-row {
+    display: flex;
+
+    gap: 9px;
+
+    margin-bottom: 16px;
+
+    animation:
+      messageIn 0.25s ease;
+  }
+
+
+  .message-row.user {
+    justify-content: flex-end;
+  }
+
+
+  .message-avatar {
+    width: 30px;
+    height: 30px;
+
+    flex: 0 0 30px;
+
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+      rgba(37, 217, 139, 0.12);
+
+    border:
+      1px solid
+      rgba(37, 217, 139, 0.16);
+
+    font-size: 15px;
+  }
+
+
+  .message-row.user .message-avatar {
+    display: none;
+  }
+
+
+  .bubble {
+    max-width:
+      min(78%, 650px);
+
+    padding: 12px 15px;
+
+    border-radius: 17px;
+
+    line-height: 1.5;
+
+    font-size: 14px;
+
+    white-space: pre-wrap;
+  }
+
+
+  /* BOT MESSAGE */
+
+  .message-row.bot .bubble {
+    background:
+      #173c33;
+
+    border:
+      1px solid
+      rgba(100, 180, 150, 0.15);
+
+    color:
+      var(--ink-soft);
+
+    border-top-left-radius: 5px;
+  }
+
+
+  /* USER MESSAGE */
+
+  .message-row.user .bubble {
+    background:
+      linear-gradient(
+        135deg,
+        #19b873,
+        #087d50
+      );
+
+    color: #ffffff;
+
+    border-top-right-radius: 5px;
+
+    box-shadow:
+      0 8px 25px
+      rgba(24, 165, 107, 0.25);
+  }
+
+
+  @keyframes messageIn {
+
+    from {
+      opacity: 0;
+      transform: translateY(7px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+  }
+
+
+  /* =========================
+     TYPING
+  ========================= */
+
+  .typing {
+    display: none;
+
+    align-items: center;
+
+    gap: 5px;
+
+    width: fit-content;
+
+    padding: 12px 15px;
+
+    background:
+      #173c33;
+
+    border:
+      1px solid
+      rgba(100, 180, 150, 0.15);
+
+    border-radius: 17px;
+
+    border-top-left-radius: 5px;
+
+    margin-left: 39px;
+
+    margin-bottom: 14px;
+  }
+
+
+  .typing.active {
+    display: flex;
+  }
+
+
+  .typing span {
+    width: 6px;
+    height: 6px;
+
+    background:
+      var(--green);
+
+    border-radius: 50%;
+
+    animation:
+      typing 1s infinite ease-in-out;
+  }
+
+
+  .typing span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+
+  .typing span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+
+  @keyframes typing {
+
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.5;
+    }
+
+    30% {
+      transform: translateY(-5px);
+      opacity: 1;
+    }
+
+  }
+
+
+  /* =========================
+     QUICK ACTIONS
+  ========================= */
+
+  .quick-section {
+    padding: 14px 18px 6px;
+
+    border-top:
+      1px solid
+      var(--border);
+
+    background:
+      rgba(11, 41, 34, 0.75);
+  }
+
+
+  .quick-title {
+    font-size: 11px;
+
+    color: var(--muted);
+
+    font-weight: 800;
+
+    margin-bottom: 9px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+  }
+
+
+  .quick-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+  }
+
+
+  .quick-btn {
+    border:
+      1px solid
+      rgba(100, 180, 150, 0.20);
+
+    background:
+      rgba(255, 255, 255, 0.035);
+
+    color:
+      var(--ink-soft);
+
+    padding: 8px 12px;
+
+    border-radius: 20px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    transition: 0.2s ease;
+  }
+
+
+  .quick-btn:hover {
+    border-color:
+      var(--green);
+
+    color:
+      var(--green);
+
+    background:
+      rgba(37, 217, 139, 0.10);
+
+    transform:
+      translateY(-2px);
+
+    box-shadow:
+      0 5px 15px
+      rgba(37, 217, 139, 0.08);
+  }
+
+
+  /* =========================
+     COMPOSER
+  ========================= */
+
+  .composer {
+    padding: 13px 18px 17px;
+
+    background:
+      rgba(11, 41, 34, 0.75);
+  }
+
+
+  .input-wrap {
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 9px;
+
+    background:
+      #0d241f;
+
+    border:
+      1px solid
+      rgba(100, 180, 150, 0.22);
+
+    border-radius: 17px;
+
+    padding: 7px;
+
+    transition: 0.2s ease;
+  }
+
+
+  .input-wrap:focus-within {
+    border-color:
+      var(--green);
+
+    box-shadow:
+      0 0 0 4px
+      rgba(37, 217, 139, 0.08),
+
+      0 0 25px
+      rgba(37, 217, 139, 0.05);
+  }
+
+
+  textarea {
+    width: 100%;
+
+    min-height: 42px;
+
+    max-height: 120px;
+
+    resize: none;
+
+    border: 0;
+
+    outline: 0;
+
+    padding: 10px;
+
+    color:
+      var(--ink);
+
+    background:
+      transparent;
+
+    line-height: 1.4;
+  }
+
+
+  textarea::placeholder {
+    color:
+      #708f83;
+  }
+
+
+  /* =========================
+     SEND BUTTON
+  ========================= */
+
+  .send-btn {
+    width: 43px;
+    height: 43px;
+
+    flex: 0 0 43px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    background:
+      linear-gradient(
+        135deg,
+        var(--green),
+        #0b9c63
+      );
+
+    color:
+      #ffffff;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: 0.2s ease;
+
+    box-shadow:
+      0 6px 18px
+      rgba(37, 217, 139, 0.18);
+  }
+
+
+  .send-btn:hover {
+    transform:
+      translateY(-2px);
+
+    box-shadow:
+      0 10px 25px
+      rgba(37, 217, 139, 0.28);
+  }
+
+
+  .send-btn:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    transform: none;
+  }
+
+
+  /* =========================
+     FOOTER
+  ========================= */
+
+  footer {
+    text-align: center;
+
+    padding: 16px 5px 5px;
+
+    color:
+      var(--muted);
+
+    font-size: 11px;
+  }
+
+
+  footer span {
+    color:
+      var(--green);
+
+    font-weight: 700;
+  }
+
+
+  /* =========================
+     MOBILE
+  ========================= */
+
+  @media (max-width: 600px) {
+
+    .app {
+      padding: 12px;
+    }
+
+
+    header {
+      padding-bottom: 16px;
+    }
+
+
+    .status {
+      font-size: 10px;
+      padding: 7px 9px;
+    }
+
+
+    .hero {
+      padding: 23px;
+      border-radius: 22px;
+    }
+
+
+    .hero h2 {
+      font-size: 29px;
+    }
+
+
+    .hero p {
+      font-size: 13px;
+    }
+
+
+    .chat-card {
+      min-height: 550px;
+      border-radius: 20px;
+    }
+
+
+    .messages {
+      padding: 16px;
+    }
+
+
+    .bubble {
+      max-width: 85%;
+      font-size: 13px;
+    }
+
+
+    .quick-section {
+      padding-left: 13px;
+      padding-right: 13px;
+    }
+
+
+    .quick-actions {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 5px;
+    }
+
+
+    .quick-btn {
+      white-space: nowrap;
+    }
+
+
+    .composer {
+      padding: 10px 13px 14px;
+    }
+
+  }
+</style>
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header>
+      <div class="brand">
+        <div class="logo">🏙️</div>
+
+        <div>
+          <h1>UrbanEase</h1>
+          <p>AI-powered sustainable city assistant</p>
+        </div>
+      </div>
+
+      <div class="status">
+        <span class="status-dot"></span>
+        AI Online
+      </div>
+    </header>
+
+
+    <!-- HERO -->
+    <section class="hero">
+
+      <div class="badge">
+        🌍 SDG 11 • Sustainable Cities
+      </div>
+
+      <h2>
+        Make your city <span>smarter.</span>
+        One action at a time.
+      </h2>
+
+      <p>
+        Ask UrbanEase about sustainable transport, waste reduction,
+        pollution, public spaces, energy saving, and responsible urban living.
+      </p>
+
+    </section>
+
+
+    <!-- CHAT -->
+    <main class="chat-card">
+
+      <div class="chat-header">
+
+        <div class="bot-avatar">
+          🌆
+        </div>
+
+        <div>
+          <strong>UrbanEase Assistant</strong>
+          <small>Smart city guidance</small>
+        </div>
+
+        <button
+          class="clear-btn"
+          onclick="clearChat()"
+          title="Clear conversation"
+        >
+          🗑️
+        </button>
+
+      </div>
+
+
+      <!-- MESSAGES -->
+      <div
+        class="messages"
+        id="messages"
+      ></div>
+
+
+      <!-- TYPING -->
+      <div
+        class="typing"
+        id="typing"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+
+      <!-- QUICK ACTIONS -->
+      <section class="quick-section">
+
+        <div class="quick-title">
+          Try asking
+        </div>
+
+        <div class="quick-actions">
+
+          <button
+            class="quick-btn"
+            onclick="quickMessage('How can I make my daily commute more sustainable?')"
+          >
+            🚌 Sustainable commute
+          </button>
+
+          <button
+            class="quick-btn"
+            onclick="quickMessage('How should I sort my household waste?')"
+          >
+            ♻️ Sort my waste
+          </button>
+
+          <button
+            class="quick-btn"
+            onclick="quickMessage('How can I reduce energy use at home?')"
+          >
+            💡 Save energy
+          </button>
+
+          <button
+            class="quick-btn"
+            onclick="quickMessage('Give me ideas for making my neighbourhood greener.')"
+          >
+            🌳 Greener neighbourhood
+          </button>
+
+          <button
+            class="quick-btn"
+            onclick="quickMessage('How can I report a civic issue responsibly?')"
+          >
+            📢 Report an issue
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- COMPOSER -->
+      <div class="composer">
+
+        <div class="input-wrap">
+
+          <textarea
+            id="messageInput"
+            placeholder="Describe a city problem or ask for a sustainable solution..."
+            rows="1"
+          ></textarea>
+
+          <button
+            class="send-btn"
+            id="sendBtn"
+            onclick="sendMessage()"
+            title="Send message"
+          >
+            ➤
+          </button>
+
+        </div>
+
+      </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer>
+      UrbanEase • <span>SDG 11</span> • Responsible AI
+    </footer>
+
+  </div>
+
+
+  <script>
+
+    /* ==============================
+       CHAT STATE
+    ============================== */
+
+    let history = [];
+
+
+    /* ==============================
+       ELEMENTS
+    ============================== */
+
+    const messages = document.getElementById("messages");
+    const input = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const typing = document.getElementById("typing");
+
+
+    /* ==============================
+       WELCOME MESSAGE
+    ============================== */
+
+    function showWelcome() {
+
+      addMessage(
+        "bot",
+        "Hello! 👋 I'm UrbanEase.\n\nTell me about a city problem you're facing, and I'll help you create a practical and sustainable solution."
+      );
+
+    }
+
+
+    /* ==============================
+       ADD MESSAGE
+    ============================== */
+
+    function addMessage(role, text) {
+
+      const row = document.createElement("div");
+
+      row.className =
+        "message-row " +
+        (role === "user" ? "user" : "bot");
+
+
+      if (role === "bot") {
+
+        const avatar = document.createElement("div");
+
+        avatar.className = "message-avatar";
+
+        avatar.textContent = "🌆";
+
+        row.appendChild(avatar);
+
+      }
+
+
+      const bubble = document.createElement("div");
+
+      bubble.className = "bubble";
+
+      bubble.textContent = text;
+
+
+      row.appendChild(bubble);
+
+      messages.appendChild(row);
+
+
+      messages.scrollTop = messages.scrollHeight;
+
+    }
+
+
+    /* ==============================
+       QUICK MESSAGE
+    ============================== */
+
+    function quickMessage(text) {
+
+      input.value = text;
+
+      input.focus();
+
+      sendMessage();
+
+    }
+
+
+    /* ==============================
+       SEND MESSAGE
+    ============================== */
+
+    async function sendMessage() {
+
+      const text = input.value.trim();
+
+      if (!text) return;
+
+
+      addMessage("user", text);
+
+
+      history.push({
+        role: "user",
+        text: text
+      });
+
+
+      input.value = "";
+
+      input.style.height = "auto";
+
+      sendBtn.disabled = true;
+
+      typing.classList.add("active");
+
+
+      try {
+
+        /*
+          Your backend API should provide:
+
+          POST /chat
+
+          Request:
+          {
+            "message": "user message",
+            "history": [...]
+          }
+
+          Response:
+          {
+            "response": "AI response"
+          }
+        */
+
+        const response = await fetch("/chat", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+
+            message: text,
+
+            history: history
+
+          })
+
+        });
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Server returned " + response.status
+          );
+
+        }
+
+
+        const data = await response.json();
+
+
+        const botReply =
+          data.response ||
+          "I couldn't generate a response right now. Please try again.";
+
+
+        typing.classList.remove("active");
+
+
+        addMessage(
+          "bot",
+          botReply
+        );
+
+
+        history.push({
+
+          role: "model",
+
+          text: botReply
+
+        });
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        typing.classList.remove("active");
+
+
+        addMessage(
+          "bot",
+          "⚠️ I couldn't connect to the AI server right now. Please check your API connection and try again."
+        );
+
+      }
+
+
+      sendBtn.disabled = false;
+
+      input.focus();
+
+    }
+
+
+    /* ==============================
+       CLEAR CHAT
+    ============================== */
+
+    function clearChat() {
+
+      history = [];
+
+      messages.innerHTML = "";
+
+      showWelcome();
+
+      input.focus();
+
+    }
+
+
+    /* ==============================
+       ENTER KEY
+    ============================== */
+
+    input.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Enter" &&
+          !event.shiftKey
+        ) {
+
+          event.preventDefault();
+
+          sendMessage();
+
+        }
+
+      }
+    );
+
+
+    /* ==============================
+       AUTO RESIZE TEXTAREA
+    ============================== */
+
+    input.addEventListener(
+      "input",
+      function() {
+
+        this.style.height = "auto";
+
+        this.style.height =
+          Math.min(this.scrollHeight, 120) + "px";
+
+      }
+    );
+
+
+    /* ==============================
+       INITIALIZE
+    ============================== */
+
+    showWelcome();
+
+  </script>
+
+</body>
+</html>
