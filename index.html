@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>UrbanEase | Smart City Assistant</title>
+
+    <!-- Markdown renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Security for rendered Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-main: #071a16;
+            --bg-secondary: #0a211c;
+
+            --surface: #102d26;
+            --surface-2: #14382f;
+            --surface-3: #173f35;
+
+            --primary: #25d98b;
+            --primary-dark: #0fa968;
+
+            --cyan: #35d6e8;
+            --blue: #4f8cff;
+
+            --amber: #ffc857;
+            --red: #ff6b6b;
+
+            --text: #f4fffb;
+            --text-secondary: #d9eee7;
+            --muted: #9ab7ad;
+
+            --border: rgba(110, 190, 160, 0.18);
+
+            --shadow:
+                0 20px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(37, 217, 139, 0.13),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(53, 214, 232, 0.10),
+                    transparent 25%
+                ),
+                linear-gradient(
+                    135deg,
+                    var(--bg-main),
+                    var(--bg-secondary)
+                );
+
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.25;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+        }
+
+        button,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+    position: relative;
+    z-index: 100;
+
+    width: 100%;
+
+    border-bottom: 1px solid var(--border);
+
+    background:
+        rgba(7, 26, 22, 0.82);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+        .header-inner {
+            max-width: 1200px;
+            margin: auto;
+
+            padding: 18px 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--cyan)
+                );
+
+            color: #062019;
+            font-size: 23px;
+
+            box-shadow:
+                0 8px 25px rgba(37, 217, 139, 0.22);
+        }
+
+        .brand-text h1 {
+            font-size: 20px;
+            line-height: 1.1;
+            letter-spacing: -0.4px;
+        }
+
+        .brand-text p {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 12px;
+
+            border: 1px solid var(--border);
+            border-radius: 999px;
+
+            background: rgba(16, 45, 38, 0.8);
+
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+
+            background: var(--primary);
+
+            box-shadow:
+                0 0 12px rgba(37, 217, 139, 0.8);
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            width: min(1200px, calc(100% - 32px));
+            margin: auto;
+
+            padding: 55px 0 40px;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            text-align: center;
+            max-width: 850px;
+
+            margin: 0 auto 40px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 14px;
+
+            border: 1px solid rgba(37, 217, 139, 0.25);
+            border-radius: 999px;
+
+            background: rgba(37, 217, 139, 0.07);
+
+            color: var(--primary);
+
+            font-size: 13px;
+            font-weight: 600;
+
+            margin-bottom: 18px;
+        }
+
+        .hero h3 {
+            font-size: clamp(36px, 6vw, 66px);
+            line-height: 1.02;
+            letter-spacing: -2.8px;
+
+            margin-bottom: 18px;
+        }
+
+        .hero h3 span {
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary),
+                    var(--cyan)
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            max-width: 680px;
+            margin: auto;
+
+            color: var(--muted);
+
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           CHAT CARD
+        ========================= */
+
+        .chat-card {
+            max-width: 950px;
+            margin: auto;
+
+            border: 1px solid var(--border);
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(20, 56, 47, 0.94),
+                    rgba(10, 33, 28, 0.97)
+                );
+
+            box-shadow: var(--shadow);
+
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 18px 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .assistant-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .assistant-avatar {
+            width: 42px;
+            height: 42px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(37, 217, 139, 0.2),
+                    rgba(53, 214, 232, 0.18)
+                );
+
+            border: 1px solid rgba(37, 217, 139, 0.25);
+
+            font-size: 21px;
+        }
+
+        .assistant-info h3 {
+            font-size: 15px;
+        }
+
+        .assistant-info p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .clear-btn {
+            border: 1px solid var(--border);
+            background: transparent;
+
+            color: var(--muted);
+
+            padding: 8px 12px;
+            border-radius: 9px;
+
+            font-size: 12px;
+
+            transition: 0.2s ease;
+        }
+
+        .clear-btn:hover {
+            color: var(--text);
+            border-color: rgba(37, 217, 139, 0.4);
+            background: rgba(37, 217, 139, 0.06);
+        }
+
+        /* =========================
+           MESSAGES
+        ========================= */
+
+        .messages {
+            height: 480px;
+            overflow-y: auto;
+
+            padding: 24px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+
+            scrollbar-width: thin;
+        }
+
+        .messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages::-webkit-scrollbar-thumb {
+            background: rgba(37, 217, 139, 0.25);
+            border-radius: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+
+            max-width: 84%;
+
+            animation: messageIn 0.25s ease;
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateY(7px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 31px;
+            height: 31px;
+
+            flex: 0 0 31px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 10px;
+
+            background: var(--surface-3);
+
+            border: 1px solid var(--border);
+
+            font-size: 14px;
+        }
+
+        .message.user .message-avatar {
+            background:
+                rgba(37, 217, 139, 0.16);
+
+            border-color:
+                rgba(37, 217, 139, 0.25);
+        }
+
+        .bubble {
+            padding: 13px 16px;
+
+            border-radius: 16px;
+
+            color: var(--text-secondary);
+
+            font-size: 14px;
+            line-height: 1.65;
+
+            overflow-wrap: anywhere;
+        }
+
+        .message.bot .bubble {
+            background: rgba(16, 45, 38, 0.9);
+            border: 1px solid var(--border);
+
+            border-top-left-radius: 5px;
+        }
+
+        .message.user .bubble {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary-dark),
+                    #11966c
+                );
+
+            color: #f4fffb;
+
+            border-top-right-radius: 5px;
+        }
+
+        /* Markdown formatting */
+
+        .bubble p {
+            margin: 0 0 9px;
+        }
+
+        .bubble p:last-child {
+            margin-bottom: 0;
+        }
+
+        .bubble strong {
+            color: var(--text);
+            font-weight: 750;
+        }
+
+        .message.user .bubble strong {
+            color: #ffffff;
+        }
+
+        .bubble ul,
+        .bubble ol {
+            margin: 8px 0;
+            padding-left: 22px;
+        }
+
+        .bubble li {
+            margin: 5px 0;
+        }
+
+        .bubble h1,
+        .bubble h3,
+        .bubble h3 {
+            color: var(--text);
+            margin: 10px 0 7px;
+        }
+
+        .bubble code {
+            padding: 2px 6px;
+            border-radius: 6px;
+
+            background: rgba(0, 0, 0, 0.25);
+
+            font-size: 12px;
+        }
+
+        .bubble blockquote {
+            margin: 8px 0;
+            padding-left: 12px;
+
+            border-left: 3px solid var(--primary);
+
+            color: var(--muted);
+        }
+
+        .typing {
+            display: none;
+            align-items: center;
+            gap: 8px;
+
+            padding: 0 24px 15px;
+
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .typing.active {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: var(--primary);
+
+            animation: typing 1.2s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.45;
+            }
+
+            30% {
+                transform: translateY(-4px);
+                opacity: 1;
+            }
+        }
+
+        /* =========================
+           QUICK SUGGESTIONS
+        ========================= */
+
+        .suggestions {
+            padding: 0 20px 18px;
+        }
+
+        .suggestion-title {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 600;
+
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+
+            margin-bottom: 9px;
+        }
+
+        .suggestion-row {
+            display: flex;
+            gap: 8px;
+
+            overflow-x: auto;
+
+            padding-bottom: 3px;
+
+            scrollbar-width: none;
+        }
+
+        .suggestion-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .suggestion-btn {
+            flex: 0 0 auto;
+
+            padding: 9px 12px;
+
+            border: 1px solid var(--border);
+            border-radius: 10px;
+
+            background: rgba(16, 45, 38, 0.75);
+
+            color: var(--text-secondary);
+
+            font-size: 12px;
+
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .suggestion-btn:hover {
+            transform: translateY(-2px);
+
+            border-color:
+                rgba(37, 217, 139, 0.45);
+
+            background:
+                rgba(37, 217, 139, 0.08);
+
+            color: var(--text);
+        }
+
+        /* Language row */
+
+        .language-row {
+            margin-top: 15px;
+        }
+
+        .language-row .suggestion-btn.active {
+            border-color: var(--primary);
+
+            background:
+                rgba(37, 217, 139, 0.14);
+
+            color: var(--primary);
+
+            box-shadow:
+                0 0 0 1px rgba(37, 217, 139, 0.08);
+        }
+
+        /* =========================
+           COMPOSER
+        ========================= */
+
+        .composer {
+            padding: 16px 20px 20px;
+
+            border-top: 1px solid var(--border);
+
+            background:
+                rgba(7, 26, 22, 0.3);
+        }
+
+        .composer-box {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+
+            padding: 9px;
+
+            border: 1px solid var(--border);
+            border-radius: 16px;
+
+            background:
+                rgba(16, 45, 38, 0.85);
+
+            transition: border-color 0.2s ease;
+        }
+
+        .composer-box:focus-within {
+            border-color:
+                rgba(37, 217, 139, 0.45);
+        }
+
+        #messageInput {
+            width: 100%;
+
+            min-height: 42px;
+            max-height: 120px;
+
+            resize: none;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            color: var(--text);
+
+            padding: 10px 9px;
+
+            line-height: 1.45;
+
+            font-size: 14px;
+        }
+
+        #messageInput::placeholder {
+            color: #78988e;
+        }
+
+        .send-btn {
+            width: 43px;
+            height: 43px;
+
+            flex: 0 0 43px;
+
+            border: none;
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--cyan)
+                );
+
+            color: #062019;
+
+            font-size: 18px;
+            font-weight: 800;
+
+            transition:
+                transform 0.2s ease,
+                filter 0.2s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .composer-note {
+            margin-top: 9px;
+
+            text-align: center;
+
+            color: #718f86;
+            font-size: 10px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            text-align: center;
+
+            padding: 28px 0 15px;
+
+            color: #6f8e84;
+
+            font-size: 11px;
+        }
+
+        .footer strong {
+            color: var(--primary);
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .header-inner {
+                padding: 14px 16px;
+            }
+
+            .brand-text p {
+                display: none;
+            }
+
+            .status {
+                padding: 7px 9px;
+            }
+
+            .main {
+                width: min(100% - 20px, 1200px);
+                padding-top: 35px;
+            }
+
+            .hero {
+                margin-bottom: 28px;
+            }
+
+            .hero h3 {
+                font-size: 40px;
+                letter-spacing: -1.8px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .chat-card {
+                border-radius: 18px;
+            }
+
+            .messages {
+                height: 440px;
+                padding: 18px;
+            }
+
+            .message {
+                max-width: 91%;
+            }
+
+            .suggestions {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .composer {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .chat-header {
+                padding: 14px;
+            }
+
+            .assistant-info p {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="header">
+        <div class="header-inner">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🤖
+                </div>
+
+                <div class="brand-text">
+                    <h1>UrbanEase</h1>
+                    <p>Smart City Assistant </p>
+                </div>
+
+            </div>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                AI Online
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main">
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-badge">
+                🌱 • Sustainable Cities & Communities
+            </div>
+
+            <h3>
+                Make your city
+                <span>smarter.</span>
+            </h3>
+
+            <p>
+                Ask UrbanEase about transport, waste, pollution,
+                energy, public spaces and everyday urban problems.
+                Get simple and practical solutions you can actually use.
+            </p>
+
+        </section>
+
+
+        <!-- CHAT -->
+
+        <section class="chat-card">
+
+            <!-- CHAT HEADER -->
+
+            <div class="chat-header">
+
+                <div class="assistant-info">
+
+                    <div class="assistant-avatar">
+                        🤖
+                    </div>
+
+                    <div>
+                        <h3>Smart City Assistant</h3>
+                        <p id="languageStatus">
+                            Responding in English
+                        </p>
+                    </div>
+
+                </div>
+
+                <button
+                    class="clear-btn"
+                    id="clearBtn"
+                    type="button"
+                >
+                    Clear chat
+                </button>
+
+            </div>
+
+
+            <!-- MESSAGES -->
+
+            <div
+                class="messages"
+                id="messages"
+            >
+
+                <div class="message bot">
+
+                    <div class="message-avatar">
+                        🤖
+                    </div>
+
+                    <div class="bubble">
+
+                        <p>
+                            Hi! I'm <strong>UrbanEase</strong> 👋
+                        </p>
+
+                        <p>
+                            I can help you find practical solutions
+                            for everyday city problems.
+                        </p>
+
+                        <p>
+                            Try asking me about transport, waste,
+                            pollution, energy or your neighbourhood.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TYPING -->
+
+            <div
+                class="typing"
+                id="typing"
+            >
+
+                <span>UrbanEase is thinking</span>
+
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+            </div>
+
+
+            <!-- SUGGESTIONS -->
+
+            <div class="suggestions">
+
+                <div class="suggestion-title">
+                    Quick suggestions
+                </div>
+
+                <div class="suggestion-row">
+
+                    <button
+                        class="suggestion-btn"
+                        type="button"
+                        data-message="How can I make my daily commute more sustainable?"
+                    >
+                        🚍 Sustainable commute
+                    </button>
+
+                    <button
+                        class="suggestion-btn"
+                        type="button"
+                        data-message="How should I separate household waste?"
+                    >
+                        ♻️ Sort my waste
+                    </button>
+
+                    <button
+                        class="suggestion-btn"
+                        type="button"
+                        data-message="Give me simple ways to save energy at home."
+                    >
+                        ⚡ Save energy
+                    </button>
+
+                    <button
+                        class="suggestion-btn"
+                        type="button"
+                        data-message="How can I make my neighbourhood greener?"
+                    >
+                        🌱 Greener neighbourhood
+                    </button>
+
+                    <button
+                        class="suggestion-btn"
+                        type="button"
+                        data-message="What should I do if there is a pothole or broken streetlight in my area?"
+                    >
+                        🚨 Report an issue
+                    </button>
+
+                </div>
+
+
+                <!-- LANGUAGE -->
+
+                <div class="language-row">
+
+                    <div class="suggestion-title">
+                        🌐 Choose language
+                    </div>
+
+                    <div class="suggestion-row">
+
+                        <button
+                            class="suggestion-btn active language-btn"
+                            type="button"
+                            data-language="English"
+                        >
+                            🇬🇧 English
+                        </button>
+
+                        <button
+                            class="suggestion-btn language-btn"
+                            type="button"
+                            data-language="Hindi"
+                        >
+                            🇮🇳 हिन्दी
+                        </button>
+
+                        <button
+                            class="suggestion-btn language-btn"
+                            type="button"
+                            data-language="Gujarati"
+                        >
+                            ગુજરાતી
+                        </button>
+
+                        <button
+                            class="suggestion-btn language-btn"
+                            type="button"
+                            data-language="Marathi"
+                        >
+                            मराठी
+                        </button>
+
+                        <button
+                            class="suggestion-btn language-btn"
+                            type="button"
+                            data-language="Bengali"
+                        >
+                            বাংলা
+                        </button>
+
+                        <button
+                            class="suggestion-btn language-btn"
+                            type="button"
+                            data-language="Tamil"
+                        >
+                            தமிழ்
+                        </button>
+
+                        <button
+                            class="suggestion-btn language-btn"
+                            type="button"
+                            data-language="Telugu"
+                        >
+                            తెలుగు
+                        </button>
+
+                        <button
+                            class="suggestion-btn language-btn"
+                            type="button"
+                            data-language="Kannada"
+                        >
+                            ಕನ್ನಡ
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- COMPOSER -->
+
+            <div class="composer">
+
+                <div class="composer-box">
+
+                    <textarea
+                        id="messageInput"
+                        placeholder="Ask UrbanEase about your city..."
+                        rows="1"
+                        maxlength="2000"
+                    ></textarea>
+
+                    <button
+                        class="send-btn"
+                        id="sendBtn"
+                        type="button"
+                        aria-label="Send message"
+                    >
+                        ↑
+                    </button>
+
+                </div>
+
+                <div class="composer-note">
+                    UrbanEase • AI-powered Smart City Assistant
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer class="footer">
+            Built your Sustainable Cities
+            and Communities
+        </footer>
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        /* =========================
+           STATE
+        ========================== */
+
+        let selectedLanguage = "English";
+
+        let conversationHistory = [];
+
+        let isSending = false;
+
+
+        /* =========================
+           ELEMENTS
+        ========================== */
+
+        const messages =
+            document.getElementById("messages");
+
+        const messageInput =
+            document.getElementById("messageInput");
+
+        const sendBtn =
+            document.getElementById("sendBtn");
+
+        const typing =
+            document.getElementById("typing");
+
+        const clearBtn =
+            document.getElementById("clearBtn");
+
+        const languageStatus =
+            document.getElementById("languageStatus");
+
+
+        /* =========================
+           MARKDOWN RENDERING
+        ========================== */
+
+        function renderMarkdown(text) {
+
+            if (!text) {
+                return "";
+            }
+
+            const html = marked.parse(text);
+
+            return DOMPurify.sanitize(html);
+        }
+
+
+        /* =========================
+           ADD MESSAGE
+        ========================== */
+
+        function addMessage(text, sender) {
+
+            const message = document.createElement("div");
+
+            message.className =
+                `message ${sender}`;
+
+            const avatar =
+                document.createElement("div");
+
+            avatar.className =
+                "message-avatar";
+
+            avatar.textContent =
+                sender === "bot"
+                    ? "🤖"
+                    : "👤";
+
+
+            const bubble =
+                document.createElement("div");
+
+            bubble.className =
+                "bubble";
+
+
+            if (sender === "bot") {
+
+                /*
+                 * Convert Markdown returned by Gemini
+                 * into clean HTML.
+                 *
+                 * This removes visible **bold** symbols.
+                 */
+
+                bubble.innerHTML =
+                    renderMarkdown(text);
+
+            } else {
+
+                /*
+                 * User messages are kept as
+                 * plain text for safety.
+                 */
+
+                bubble.textContent =
+                    text;
+            }
+
+
+            message.appendChild(avatar);
+            message.appendChild(bubble);
+
+            messages.appendChild(message);
+
+            scrollToBottom();
+        }
+
+
+        /* =========================
+           SCROLL
+        ========================== */
+
+        function scrollToBottom() {
+
+            messages.scrollTop =
+                messages.scrollHeight;
+        }
+
+
+        /* =========================
+           TYPING
+        ========================== */
+
+        function showTyping() {
+
+            typing.classList.add("active");
+
+            scrollToBottom();
+        }
+
+
+        function hideTyping() {
+
+            typing.classList.remove("active");
+        }
+
+
+        /* =========================
+           SEND MESSAGE
+        ========================== */
+
+        async function sendMessage(text) {
+
+            text = text.trim();
+
+            if (!text || isSending) {
+                return;
+            }
+
+
+            isSending = true;
+
+            sendBtn.disabled = true;
+
+
+            /* Show user message */
+
+            addMessage(
+                text,
+                "user"
+            );
+
+
+            /* Clear input */
+
+            messageInput.value = "";
+
+            resizeTextarea();
+
+
+            /* Show typing */
+
+            showTyping();
+
+
+            try {
+
+                /*
+                 * Send message to your
+                 * FastAPI backend.
+                 */
+
+                const response =
+                    await fetch("/chat", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            message: text,
+
+                            language:
+                                selectedLanguage,
+
+                            history:
+                                conversationHistory
+
+                        })
+
+                    });
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Server returned ${response.status}`
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                const reply =
+                    data.response ||
+                    "Sorry, I couldn't generate a response.";
+
+
+                hideTyping();
+
+
+                /* Show AI response */
+
+                addMessage(
+                    reply,
+                    "bot"
+                );
+
+
+                /*
+                 * Save conversation for
+                 * future messages.
+                 */
+
+                conversationHistory.push({
+
+                    role: "user",
+                    text: text
+
+                });
+
+                conversationHistory.push({
+
+                    role: "model",
+                    text: reply
+
+                });
+
+
+                /*
+                 * Keep history manageable.
+                 */
+
+                if (
+                    conversationHistory.length > 20
+                ) {
+
+                    conversationHistory =
+                        conversationHistory.slice(-20);
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Chat error:",
+                    error
+                );
+
+
+                hideTyping();
+
+
+                addMessage(
+                    "Sorry, I couldn't connect to the Smart City AI service. Please try again.",
+                    "bot"
+                );
+
+            } finally {
+
+                isSending = false;
+
+                sendBtn.disabled = false;
+
+                messageInput.focus();
+
+            }
+
+        }
+
+
+        /* =========================
+           SEND BUTTON
+        ========================== */
+
+        sendBtn.addEventListener(
+            "click",
+            function () {
+
+                sendMessage(
+                    messageInput.value
+                );
+
+            }
+        );
+
+
+        /* =========================
+           ENTER KEY
+        ========================== */
+
+        messageInput.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                ) {
+
+                    event.preventDefault();
+
+                    sendMessage(
+                        messageInput.value
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================
+           AUTO TEXTAREA SIZE
+        ========================== */
+
+        function resizeTextarea() {
+
+            messageInput.style.height =
+                "auto";
+
+            messageInput.style.height =
+                Math.min(
+                    messageInput.scrollHeight,
+                    120
+                ) + "px";
+
+        }
+
+
+        messageInput.addEventListener(
+            "input",
+            resizeTextarea
+        );
+
+
+        /* =========================
+           QUICK SUGGESTIONS
+        ========================== */
+
+        document
+            .querySelectorAll(
+                ".suggestion-btn[data-message]"
+            )
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const text =
+                            button.dataset.message;
+
+                        sendMessage(text);
+
+                    }
+                );
+
+            });
+
+
+        /* =========================
+           LANGUAGE BUTTONS
+        ========================== */
+
+        document
+            .querySelectorAll(
+                ".language-btn"
+            )
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        /*
+                         * Update selected language.
+                         */
+
+                        selectedLanguage =
+                            button.dataset.language;
+
+
+                        /*
+                         * Remove active state
+                         * from all languages.
+                         */
+
+                        document
+                            .querySelectorAll(
+                                ".language-btn"
+                            )
+                            .forEach(
+                                function (btn) {
+
+                                    btn.classList
+                                        .remove(
+                                            "active"
+                                        );
+
+                                }
+                            );
+
+
+                        /*
+                         * Activate selected
+                         * language.
+                         */
+
+                        button.classList
+                            .add("active");
+
+
+                        /*
+                         * Update header.
+                         */
+
+                        languageStatus.textContent =
+                            `Responding in ${selectedLanguage}`;
+
+
+                        /*
+                         * Tell the user.
+                         */
+
+                        addMessage(
+                            `Language changed to **${selectedLanguage}** 🌐`,
+                            "bot"
+                        );
+
+                    }
+                );
+
+            });
+
+
+        /* =========================
+           CLEAR CHAT
+        ========================== */
+
+        clearBtn.addEventListener(
+            "click",
+            function () {
+
+                conversationHistory = [];
+
+                messages.innerHTML = "";
+
+
+                addMessage(
+                    `Hi! I'm **UrbanEase** 👋\n\nYour conversation has been cleared. Ask me anything about sustainable cities and everyday urban problems.`,
+                    "bot"
+                );
+
+            }
+        );
+
+
+        /* =========================
+           INITIALIZE
+        ========================== */
+
+        resizeTextarea();
+
+        messageInput.focus();
+
+    </script>
+
+</body>
+</html>
